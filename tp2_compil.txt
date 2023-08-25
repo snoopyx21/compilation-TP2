@@ -1,0 +1,59 @@
+TP2:
+
+en lex => Regex
+avec yacc => grammaire
+
+=> sur linux, yacc = bizon
+
+
+makefile:
+prefixe=exo1
+
+all: y.tab.o lex.yy.o
+	gcc y.tab.o lex.yy.o -ly -lfl -o $(prefixe)
+
+y.tab.o: $(prefixe).y
+	yacc -d $(prefixe).y
+	gcc -c y.tab.c
+
+lex.yy.o: $(prefixe).l y.tab.h
+	lex $(prefixe).l
+	gcc -c lex.yy.c
+
+clean:
+	rm -f *.o y.tab.c y.tab.h lex.yy.c a.out $(prefixe)
+
+
+
+Structure Fichier Yacc
+
+/* Déclaration c & yacc */
+
+- déclaration c entre %{ }%
+- déclaration Yacc :
+	- %Token pour def les tokens
+	- %left / %right : pour def associativité & priorités
+	- %type / %union : pour gerer les types
+
+
+
+%%
+
+/* Règles de trad */
+Couples production/action(optionnelle)
+exemple:
+
+C-> cC | d   
+	en Yacc 
+C : 'c'C  {printf("action\n");}
+  | 'd'   {___________________}
+  ;                            
+
+
+
+%%
+
+/* Fonction auxiliare */
+Code C
+	On y lance l'analyse syntaxiqueen appelant yyarse()
+	elle nécessite int yylex(); => int représente l'unité lexical 
